@@ -1,11 +1,10 @@
 const api = require('../config/upwork');
 const router = require('express').Router({ mergeParams: true });
-const Search = require('@upwork/node-upwork-oauth2/lib/routers/jobs/search').Search;
 const { adaptUpworkQuery } = require('../utils/adaptUpworkQuery');
 const Query = require('../models/Queries');
 const { ObjectId } = require('mongodb');
-
-const jobs = new Search(api);
+const protect = require('../middleware/protect');
+const jwt = require('jsonwebtoken');
 
 router.route('/upwork').get((req, res, next) => {
   try {
@@ -21,6 +20,21 @@ router.route('/upwork').get((req, res, next) => {
     next(e);
   }
 });
+
+router.post('/login', (req, res, next) => {
+  try {
+    if (process.env.ADMIN_LOGIN !== req.body.login.trim() || process.env.ADMIN_PASSWORD !== req.body.password.trim()) {
+      return res.sendStatus(400);
+    }
+
+    const token = jwt.sign({ login: req.body.login }, process.env.TOKEN_SECRET, { expiresIn: '30d' });
+    res.status(200).json({ success: true, result: token });
+  } catch (e) {
+    next(e);
+  }
+});
+
+router.use(protect());
 
 router.route('/query').post(async (req, res, next) => {
   try {

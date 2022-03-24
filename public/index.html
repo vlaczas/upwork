@@ -2,7 +2,9 @@
 <html lang='en'>
 <head>
   <meta charset='UTF-8'>
-  <title>Upwork</title>
+  <link href='favicon.png' rel='icon' type='image/png'>
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+  <title>Upwork Notifications</title>
   <style>
       * {
           margin: 0;
@@ -85,6 +87,11 @@
           margin: 0 15px;
       }
   </style>
+  <script>
+    if (!localStorage.token) {
+      window.location = '/login';
+    }
+  </script>
 </head>
 <body>
 <h1>SDA UPWORK NOTIFICATION</h1>

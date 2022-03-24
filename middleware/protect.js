@@ -9,8 +9,8 @@ const protect = (config, isStrict = true) => (req, res, next) => {
   try {
     const auth = req.get('Authorization');
     const token = auth.split(' ')[1];
-    const userData = jwt.verify(token, process.env.TOKEN_SECRET);
-    req.user = userData;
+    req.user = jwt.verify(token, process.env.TOKEN_SECRET);
+    next();
   } catch (error) {
     if (isStrict) {
       return res.status(401).json({ success: false, result: { message: 'Session Expired, please sign in!' } });

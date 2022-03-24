@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <link href='/favicon.png' rel='icon' type='image/png'>
+  <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+  <title>Login page</title>
+  <style>
+      body {
+          height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+      }
+
+      .login {
+          border-radius: 10px;
+          border: darkgrey 1px solid;
+          width: 550px;
+          padding: 25px;
+      }
+
+      .form-field {
+          display: flex;
+          flex-direction: column;
+          margin: 15px 30px;
+          width: 80%;
+      }
+
+      .form-field label {
+          font-weight: bold;
+      }
+
+      .form-field input {
+          height: 35px;
+          margin: 5px 0;
+          padding: 5px 10px;
+          border-radius: 5px;
+      }
+
+      button[type=submit] {
+          padding: 10px 20px;
+          background-color: greenyellow;
+          font-weight: 500;
+          border-radius: 5px;
+          margin: 10px 30px 10px auto;
+          cursor: pointer;
+      }
+
+      form {
+          display: flex;
+          flex-direction: column;
+      }
+  </style>
+</head>
+<body>
+<div class='login'>
+  <form>
+    <div class='form-field'>
+      <label for='login'>Login</label>
+      <input id='login' name='login' required type='text'>
+    </div>
+    <div class='form-field'>
+      <label for='password'>Password</label>
+      <input id='password' name='password' required type='password'>
+    </div>
+    <button type='submit'>Login</button>
+  </form>
+</div>
+<script src='/js/login.js'></script>
+</body>
+</html>
