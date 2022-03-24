@@ -35,3 +35,8 @@ exports.adaptUpworkQuery = (query) => {
   }
   return params;
 };
+
+exports.isNight = () => {
+  const hours = new Date().getHours();
+  return hours > 20 || hours < 10;
+};

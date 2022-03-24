@@ -1,6 +1,6 @@
 const api = require('../config/upwork');
 const router = require('express').Router({ mergeParams: true });
-const { adaptUpworkQuery } = require('../utils/adaptUpworkQuery');
+const { adaptUpworkQuery } = require('../utils/utilsFuctions');
 const Query = require('../models/Queries');
 const { ObjectId } = require('mongodb');
 const protect = require('../middleware/protect');
