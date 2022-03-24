@@ -6,7 +6,7 @@ const slack = require('./slack');
 function startCron() {
   setInterval(() => {
     sendJobUpdates();
-  }, 10000);
+  }, 300000);
   console.log('Cron Started');
 }
 
