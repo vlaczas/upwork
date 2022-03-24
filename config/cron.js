@@ -27,19 +27,16 @@ async function sendJobUpdates() {
       }
       if (!response.jobs.length) return;
 
-      const jobsToMessage = [];
       response.jobs.forEach(job => {
         newSentJobs.push(job.id);
-        jobsToMessage.push(...buildJobMessage(job));
+        try {
+          slack.chat.postMessage({
+            channel: 'upwork-jobs', blocks: buildJobMessage(job),
+          }).then(() => console.log('Message posted!')).catch(e => console.error(e));
+        } catch (error) {
+          console.log(error);
+        }
       });
-
-      try {
-        slack.chat.postMessage({
-          channel: 'upwork-jobs', blocks: jobsToMessage,
-        }).then(() => console.log('Message posted!')).catch(e => console.error(e));
-      } catch (error) {
-        console.log(error);
-      }
 
       query.lastJobs = newSentJobs;
       const q = new Query(query);

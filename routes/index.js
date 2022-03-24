@@ -3,6 +3,7 @@ const router = require('express').Router({ mergeParams: true });
 const Search = require('@upwork/node-upwork-oauth2/lib/routers/jobs/search').Search;
 const { adaptUpworkQuery } = require('../utils/adaptUpworkQuery');
 const Query = require('../models/Queries');
+const { ObjectId } = require('mongodb');
 
 const jobs = new Search(api);
 
@@ -16,16 +17,6 @@ router.route('/upwork').get((req, res, next) => {
       api.setNewAccessTokenPair(accessToken, () => {console.log('Upwork done');});
     });
     res.redirect('/');
-  } catch (e) {
-    next(e);
-  }
-});
-
-router.route('/jobs').get((req, res, next) => {
-  try {
-    jobs.find({ title: 'react' }, function(error, status, response) {
-      res.status(status).json(response?.jobs);
-    });
   } catch (e) {
     next(e);
   }
@@ -61,5 +52,15 @@ router.route('/query').post(async (req, res, next) => {
       next(e);
     }
   });
+
+router.delete('/query/:id', async (req, res, next) => {
+  try {
+    await Query.delete({ _id: ObjectId(req.params.id) });
+
+    res.sendStatus(200);
+  } catch (e) {
+    next(e);
+  }
+});
 
 module.exports = router;

@@ -22,6 +22,10 @@ class Query {
     return DB.find(filter, { projection }).toArray();
   }
 
+  static async delete(filter = {}) {
+    return DB.deleteOne(filter);
+  }
+
   async save() {
     if (this.id) {
       await DB.updateOne({ _id: ObjectId(this.id) }, { $set: this.query });
