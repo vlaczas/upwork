@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>Upwork</title>
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          min-height: 100vh;
+          padding: 50px;
+      }
+
+      h1 {
+          text-align: center;
+          margin-bottom: 50px;
+      }
+
+      .devider {
+          display: flex;
+      }
+
+      .block-1 {
+          width: 40%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          border-right: solid 1px gainsboro;
+      }
+
+      .block-2 {
+          width: 60%;
+      }
+
+      .form-field {
+          display: flex;
+          flex-direction: column;
+          margin: 0 30px;
+          width: 80%;
+      }
+
+      .form-field label {
+          font-weight: bold;
+      }
+
+      .form-field input {
+          height: 35px;
+          padding: 10px;
+          margin: 5px 0;
+          border-radius: 5px;
+      }
+
+      button[type=submit] {
+          padding: 10px 20px;
+          background-color: greenyellow;
+          font-weight: 500;
+          border-radius: 5px;
+          margin: 10px 30px 10px auto;
+          cursor: pointer;
+      }
+
+      .checkbox-field {
+          font-weight: bold;
+          display: flex;
+          align-items: center;
+          margin-left: 50px;
+          margin-bottom: 20px;
+      }
+
+      input[type=checkbox] {
+          height: 20px;
+          width: 20px;
+          margin: 0 15px;
+      }
+  </style>
+</head>
+<body>
+<h1>SDA UPWORK NOTIFICATION</h1>
+<div class='devider'>
+  <form class='block-1' id='new-query'>
+    <div class='form-field'>
+      <label for='name'>Enter name of the search</label>
+      <input id='name' name='name' required type='text'>
+    </div>
+
+    <div class='form-field'>
+      <label for='query'>Enter query from Upwork</label>
+      <input id='query' name='query' required type='text'>
+    </div>
+    <button type='submit'>Add</button>
+  </form>
+  <div class='block-2' id='queries'></div>
+</div>
+<script src='/js/main.js'></script>
+</body>
+</html>
