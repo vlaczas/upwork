@@ -24,7 +24,12 @@ async function sendJobUpdates() {
         if (error || !response.jobs?.length) return;
         if (lastJobs) {
           for (let i = 0; i < lastJobs.length; i++) {
-            const idx = response.jobs.findIndex(job => job.id === lastJobs[i]);
+            console.log('lastJob', lastJobs[i]);
+            const idx = response.jobs.findIndex(job => {
+              console.log(job.id, 'job id');
+              return job.id === lastJobs[i];
+            });
+            console.log(idx);
             if (idx > -1) {
               response.jobs.splice(idx);
               break;
@@ -35,13 +40,13 @@ async function sendJobUpdates() {
 
         response.jobs.forEach(job => {
           lastJobs.unshift(job.id);
-          try {
-            slack.chat.postMessage({
-              channel: 'upwork-jobs', blocks: buildJobMessage(job), text: job.title,
-            }).then(() => console.log('Message posted!')).catch(e => console.error(e));
-          } catch (error) {
-            console.log(error);
-          }
+          // try {
+          //   slack.chat.postMessage({
+          //     channel: 'upwork-jobs', blocks: buildJobMessage(job), text: job.title,
+          //   }).then(() => console.log('Message posted!')).catch(e => console.error(e));
+          // } catch (error) {
+          //   console.log(error);
+          // }
         });
 
         query.lastJobs = lastJobs.slice(0, 10);
