@@ -19,34 +19,33 @@ async function sendJobUpdates() {
     const jobs = new Search(api);
 
     queries.forEach(query => {
-      const lastJobs = query.lastJobs;
+      let lastJobs = query.lastJobs;
       jobs.find(query.query, function(error, status, response) {
         if (error || !response.jobs?.length) return;
         if (lastJobs) {
           for (let i = 0; i < lastJobs.length; i++) {
-            console.log('lastJob', lastJobs[i]);
-            const idx = response.jobs.findIndex(job => {
-              console.log(job.id, 'job id');
-              return job.id === lastJobs[i];
-            });
-            console.log(idx);
+            const idx = response.jobs.findIndex(job => job.id === lastJobs[i]);
             if (idx > -1) {
               response.jobs.splice(idx);
               break;
             }
           }
+        } else {
+          lastJobs = [];
+          response.jobs.forEach(job => lastJobs.push(job.id));
         }
+
         if (!response.jobs.length) return;
 
         response.jobs.forEach(job => {
           lastJobs.unshift(job.id);
-          // try {
-          //   slack.chat.postMessage({
-          //     channel: 'upwork-jobs', blocks: buildJobMessage(job), text: job.title,
-          //   }).then(() => console.log('Message posted!')).catch(e => console.error(e));
-          // } catch (error) {
-          //   console.log(error);
-          // }
+          try {
+            slack.chat.postMessage({
+              channel: 'upwork-jobs', blocks: buildJobMessage(job), text: job.title,
+            }).then(() => console.log('Message posted!')).catch(e => console.error(e));
+          } catch (error) {
+            console.log(error);
+          }
         });
 
         query.lastJobs = lastJobs.slice(0, 10);
