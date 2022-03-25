@@ -12,7 +12,7 @@ function startCron() {
 }
 
 async function sendJobUpdates() {
-  if (isNight) return;
+  if (isNight()) return;
   const queries = await Query.getDocs({ active: true });
   const jobs = new Search(api);
 

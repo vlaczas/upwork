@@ -10,11 +10,7 @@
 const clientSecret = process.env.UPWORK_API_SECRET;
 
 var config = {
-  clientId: process.env.UPWORK_API,
-  clientSecret,
-  'redirectUri': process.env.NODE_ENV === 'production'
-    ? 'https://sda-upwork.herokuapp.com/api/v1/upwork'
-    : 'https://sda.company/upwork',
+  clientId: process.env.UPWORK_API, clientSecret, 'redirectUri': 'https://sda-upwork.herokuapp.com/api/v1/upwork',
 };
 
 //var UpworkApi = require('../') // uncomment to use inside current package/sources

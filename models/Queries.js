@@ -28,6 +28,7 @@ class Query {
 
   async save() {
     if (this.id) {
+      this.query.updatedAt = new Date();
       await DB.updateOne({ _id: ObjectId(this.id) }, { $set: this.query });
     } else if (this.query) {
       const { insertedId } = await DB.insertOne(this.query);
