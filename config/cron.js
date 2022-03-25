@@ -55,8 +55,7 @@ async function sendJobUpdates() {
 }
 
 function buildJobMessage(job) {
-  const date = new Date(job.date_created);
-  date.toLocaleString('ru-RU', { timeZone: 'Europe/Kiev' });
+  const date = new Date(job.date_created).toLocaleString('ru-RU', { timeZone: 'Europe/Kiev' });
   return [
     {
       'type': 'header', 'text': {
