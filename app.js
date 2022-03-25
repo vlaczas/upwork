@@ -7,11 +7,18 @@ const hpp = require('hpp');
 const mongoSanitize = require('express-mongo-sanitize');
 const errorHandler = require('./utils/error');
 const startCron = require('./config/cron');
+const Bugsnag = require('@bugsnag/js');
+const BugsnagPluginExpress = require('@bugsnag/plugin-express');
+
+Bugsnag.start({
+  apiKey: process.env.BUGSNAG, plugins: [ BugsnagPluginExpress ],
+});
 
 const app = express();
 app.set('trust proxy', true);
 app.use(express.static('public'));
-
+const middleware = Bugsnag.getPlugin('express');
+app.use(middleware.requestHandler);
 // basic setup
 app.use(express.json());
 app.use(logger('dev'));
@@ -38,6 +45,7 @@ app.use('/api/v1', indexRouter);
  * ! Handle error
  */
 // catch 404 and forward to error handlerE
+app.use(middleware.errorHandler);
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.statusCode = 404;
