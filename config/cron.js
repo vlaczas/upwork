@@ -3,6 +3,7 @@ const api = require('./upwork');
 const { Search } = require('@upwork/node-upwork-oauth2/lib/routers/jobs/search');
 const slack = require('./slack');
 const { isNight } = require('../utils/utilsFuctions');
+const Bugsnag = require('@bugsnag/js');
 
 function startCron() {
   setInterval(() => {
@@ -12,41 +13,45 @@ function startCron() {
 }
 
 async function sendJobUpdates() {
-  if (isNight()) return;
-  const queries = await Query.getDocs({ active: true });
-  const jobs = new Search(api);
+  try {
+    if (isNight()) return;
+    const queries = await Query.getDocs({ active: true });
+    const jobs = new Search(api);
 
-  queries.forEach(query => {
-    const lastJobs = query.lastJobs;
-    jobs.find(query.query, function(error, status, response) {
-      if (error || !response.jobs?.length) return;
-      if (lastJobs) {
-        for (let i = 0; i < lastJobs.length; i++) {
-          const idx = response.jobs.findIndex(job => job.id === lastJobs[i]);
-          if (idx > -1) {
-            response.jobs.splice(idx);
-            break;
+    queries.forEach(query => {
+      const lastJobs = query.lastJobs;
+      jobs.find(query.query, function(error, status, response) {
+        if (error || !response.jobs?.length) return;
+        if (lastJobs) {
+          for (let i = 0; i < lastJobs.length; i++) {
+            const idx = response.jobs.findIndex(job => job.id === lastJobs[i]);
+            if (idx > -1) {
+              response.jobs.splice(idx);
+              break;
+            }
           }
         }
-      }
-      if (!response.jobs.length) return;
+        if (!response.jobs.length) return;
 
-      response.jobs.forEach(job => {
-        lastJobs.unshift(job.id);
-        try {
-          slack.chat.postMessage({
-            channel: 'upwork-jobs', blocks: buildJobMessage(job), text: job.title,
-          }).then(() => console.log('Message posted!')).catch(e => console.error(e));
-        } catch (error) {
-          console.log(error);
-        }
+        response.jobs.forEach(job => {
+          lastJobs.unshift(job.id);
+          try {
+            slack.chat.postMessage({
+              channel: 'upwork-jobs', blocks: buildJobMessage(job), text: job.title,
+            }).then(() => console.log('Message posted!')).catch(e => console.error(e));
+          } catch (error) {
+            console.log(error);
+          }
+        });
+
+        query.lastJobs = lastJobs.slice(0, 10);
+        const q = new Query(query);
+        q.save();
       });
-
-      query.lastJobs = lastJobs.slice(0, 10);
-      const q = new Query(query);
-      q.save();
     });
-  });
+  } catch (e) {
+    Bugsnag.notify(e);
+  }
 }
 
 function buildJobMessage(job) {
