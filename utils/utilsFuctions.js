@@ -38,5 +38,6 @@ exports.adaptUpworkQuery = (query) => {
 
 exports.isNight = () => {
   const hours = new Date().getHours();
-  return hours > 20 || hours < 10;
+  //server time GMT+0, so to silence notif for ukraine from 19pm to 10am
+  return hours > 17 || hours < 8;
 };

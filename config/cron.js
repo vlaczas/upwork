@@ -10,7 +10,6 @@ function startCron() {
     sendJobUpdates();
   }, 300000);
   console.log('Cron Started');
-  console.log(new Date());
 }
 
 async function sendJobUpdates() {
